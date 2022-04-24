@@ -58,7 +58,7 @@ class FCFS:
     def ready_state_fcfs(self):
         self.readyQueue.enqueue(self.process)  # input된 process를 readyQueue에 삽입
         if(self.CPU.CPU_running == False): # 작업 중인 process가 없다면
-            print("통과했니??")
+            print("통과했니??dd")
             self.running_state_fcfs()                     # FCFS running 상태로 돌입
 
     def running_state_fcfs(self):
