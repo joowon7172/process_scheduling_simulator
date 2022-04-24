@@ -66,6 +66,6 @@ class FCFS:
         del self.process
     
     def new_test():
-        ysd babo
+        ysd babo babo
         
         
