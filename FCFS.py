@@ -66,7 +66,7 @@ class FCFS:
         while(self.ready_process.bt > 0):
             print("ddd")                   # burst time = processing size <= 0 이하가 될 때까지
             self.CPU.running_state(self.ready_process) # process running
-        print("burst time end")
+        print("burst time end!!")
         self.terminated_state_fcfs()                        # process finish
 
     def terminated_state_fcfs(self):
