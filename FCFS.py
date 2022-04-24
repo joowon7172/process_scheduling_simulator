@@ -69,5 +69,5 @@ class FCFS:
         ysd babo babo nabi bobat tawoo
         hush choco popcorn so yummy
     def yayayaya
-        
+        main push test yes
         
