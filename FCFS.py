@@ -64,5 +64,10 @@ class FCFS:
 
     def terminated_state_fcfs(self):
         del self.process
+    
+    def new_test():
+        ysd babo babo nabi bobat tawoo
+        hush choco popcorn so yummy
+    def yayayaya
         
         
