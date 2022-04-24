@@ -67,5 +67,7 @@ class FCFS:
     
     def new_test():
         ysd babo babo nabi bobat tawoo
+        hush choco popcorn so yummy
+    def yayayaya
         
         
