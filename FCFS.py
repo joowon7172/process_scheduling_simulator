@@ -64,5 +64,8 @@ class FCFS:
 
     def terminated_state_fcfs(self):
         del self.process
+    
+    def new_test():
+        ysd babo
         
         
