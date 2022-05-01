@@ -1,5 +1,7 @@
 # SRTN (Short Remaining Time Next) v1.0 made by VRICK
 # Preemptive
+# 테스트가 많이 필요합니다.
+# 귀찮다고 클래스 내부 함수화를 안했습니다... 나중에 할 예정
 
 
 class readyQueue:
