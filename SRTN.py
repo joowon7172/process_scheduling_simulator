@@ -1,7 +1,6 @@
-# SRTN (Short Remaining Time Next) v1.0 made by VRICK
+# SRTN (Short Remaining Time Next) v1.1 made by VRICK
 # Preemptive
-# 테스트가 많이 필요합니다.
-# 귀찮다고 클래스 내부 함수화를 안했습니다... 나중에 할 예정
+# 1.1 : maxtime 방식 폐기 (현재시간이 BT합계시간 넘어가는 경우 저 혼자 중단됨), SRTN_readyQueue 따로 만듬 (재경이 고마워!)
 
 
 class readyQueue:
@@ -37,6 +36,10 @@ class SPN_readyQueue(readyQueue):
                     elif self.items[i].bt == self.items[i + 1].bt:
                         if self.items[i].at > self.items[i + 1].at:
                             self.items[i], self.items[i + 1] = self.items[i + 1], self.items[i]
+
+
+class SRTN_readyQueue(SPN_readyQueue):
+    pass
                             
 
 class process:
@@ -145,22 +148,19 @@ class SPN:
 class SRTN:
     def __init__(self, process_input, CPU_input):
         self.process = process_input
-        self.readyQueue = SPN_readyQueue()
+        self.readyQueue = SRTN_readyQueue()
         self.CPU = CPU_input
         self.type = CPU_input.type
         self.time = 0  # 현재 시간 (lapse)
-
-        self.maxtime = 0  # maxtime = 프로세스의 모든 BT의 합
-
-        for i in range(len(self.process)):
-            self.maxtime += self.process[i].bt
+        self.cnt = 0
 
     def running_state_srtn(self):
-        while self.time <= self.maxtime:
+        print("\nTest case started. CPU Type is %s." % self.type)
+        while self.cnt <= len(self.process):
             for i in self.process:  # 프로세스 목록에 있는 프로세스들을 모두 돌아볼때까지
                 if i.at == self.time and not i.isUsed:  # 한 프로세스의 AT가 현재 시간과 같고 한 번도 검사받은(= 완료된) 적이 없다면
                     self.readyQueue.enqueue(i)  # 대기 큐에 집어넣음
-                    print("process %s has arrived" % i.id)
+                    print("process %s has arrived at time %s." % (i.id, self.time))
                     i.isUsed = True
                     self.readyQueue.Priority()  # 대기 큐 한번 정렬.
 
@@ -177,7 +177,7 @@ class SRTN:
                                 for j in self.process:  # 한창 돌고 있으면 그 사이 들어올 프로세스 선발
                                     if j.at == self.time and not j.isUsed:
                                         self.readyQueue.enqueue(j)  # 대기 큐에 집어넣음
-                                        print("process %s has arrived." % j.id)
+                                        print("process %s has arrived at time %s." % (j.id, self.time))
                                         j.isUsed = True  # 뽑았으니까 일단 플래그 세우기
                                         self.readyQueue.Priority()  # 대기 큐 한번 정렬.
 
@@ -188,14 +188,14 @@ class SRTN:
                                             ready_process = j  # 새로 도착한 프로세스를 준비시킴.
 
                                         elif j.bt == ready_process.bt:  # bt가 같은 경우 at가 먼저인 걸 (먼저 도착한걸) 우선하여 작업.
-                                            if j.at < ready_process.at:
+                                            if j.at <= ready_process.at:
                                                 ready_process.isUsed = False
                                                 self.readyQueue.enqueue(ready_process)
                                                 print("process %s preempted. %s has entered instead." % (ready_process.id, j.id))
                                                 ready_process = j  # 새로 도착한 프로세스를 준비시킴.
 
                                 ready_process.bt -= self.CPU.processing_per_second  # CPU의 작업능률만큼 bt 소모
-                                print("Running %s... BT remains %s" % (ready_process.id, str(ready_process.bt)))
+                                print("Running %s... BT remains %s. Time is %s." % (ready_process.id, str(ready_process.bt), self.time))
                                 self.CPU.sumofPower += self.CPU.powerConsuming_per_second  # 소모전력 (어디다 쓰는지 모름)
 
                             else:
@@ -206,12 +206,18 @@ class SRTN:
                     self.CPU.CPU_running = False  # 작업 종료 시 CPU 플래그 끄기
 
                     if ready_process.bt == 0 and ready_process not in self.readyQueue.items:  # 작업이 끝난 프로세스의 BT가 0이고 대기 큐에서 완전히 지워졌다면 종료 메시지
-                        print("Process %s ended." % ready_process.id)
+                        print("Process %s ended at time %s." % (ready_process.id, self.time))
                         del ready_process
+                        self.cnt += 1
 
             else:  # 작업 중 대기 큐에 아직 도착한 프로세스가 없거나 할 때
                 self.time += 1  # 시간만 +1 해줌.
                 self.CPU.sumofPower += self.CPU.powerWaiting_per_second  # 대기전력 (작업을 안 할 동안 소모되는 전력?)
+                print("No process in ready queue. Time is %s." % self.time)
+
+            if self.cnt == len(self.process):
+                print("Test case ended.")
+                break
 
 
 def main():
@@ -221,12 +227,21 @@ def main():
     process4 = process(5, 5, 4)
     process5 = process(6, 3, 5)
 
-    process_list = [process1, process2, process3, process4, process5]
+    process6 = process(0, 4, 1)
+    process7 = process(6, 4, 2)
+    process8 = process(7, 2, 3)
+    process9 = process(9, 2, 4)
+    process10 = process(15, 4, 5)
 
-    CPU1 = CPU(process_list)
-    srtn_test = SRTN(process_list, CPU1)
+    process_list1 = [process1, process2, process3, process4, process5]
+    process_list2 = [process6, process7, process8, process9, process10]
 
-    srtn_test.running_state_srtn()
+    CPU1 = CPU(process_list1)
+    CPU2 = CPU(process_list2, "P")
+    srtn_test_case1 = SRTN(process_list1, CPU1)
+    srtn_test_case1.running_state_srtn()
+    srtn_test_case2 = SRTN(process_list2, CPU2)
+    srtn_test_case2.running_state_srtn()
 
 
 main()
