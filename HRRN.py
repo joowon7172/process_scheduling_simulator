@@ -8,10 +8,6 @@ class HRRN:
         self.time = 0               # 시간 기준 : 0부터 시작
 
     def running(self):
-        self.readyQueue = HRRN_readyQueue()
-        self.time = 0               # 시간 기준 : 0부터 시작
-
-    def running_state_hrrn(self):
         count = 0
 
         while count is not len(self.process):
@@ -37,9 +33,12 @@ class HRRN:
                     self.CPU.running_state(self.ready_process)  # process running
                 count += 1
                 print("process %d finish, total time : %d" %(self.ready_process.id, self.time))
+
             for ready_p in self.readyQueue.items:          
                 if ready_p.at < self.time and ready_p.bt != 0:  # 레디 큐에 도착은 했지만 프로세서에 들어가지 못하고 대기중인 프로세스에 대해
                     ready_p.wt += 1                             # 도착 시간 wt 증가
-                    
+
+        self.terminated_state_hrrn()
+
     def terminated_state_hrrn(self):
         del self.process
