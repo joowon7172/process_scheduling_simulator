@@ -18,12 +18,12 @@ if __name__ == "__main__":
     process_list.append(process5)
     
     CPU1 = op.CPU(process_list)
-    spn = SPN.SPN(process_list, CPU1)
+    #spn = SPN.SPN(process_list, CPU1)
     hrrn = HRRN.HRRN(process_list, CPU1)
-    srtn = SRTN.SRTN(process_list, CPU1)
+    #srtn = SRTN.SRTN(process_list, CPU1)
     
     #spn.running()
-    srtn.running()
-    # hrrn.running()
+    #srtn.running()
+    hrrn.running()
     
     

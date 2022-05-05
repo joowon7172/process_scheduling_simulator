@@ -25,11 +25,15 @@ class process:
         self.at = at   # arrival time
         self.bt = bt   # burst time
         self.id = id
+        self.wt = 0
+        self.tt = 0
         self.isUsed = False
+
     def calculate_time(self, time):
         self.tt = time - self.at        # turn-around time
         self.wt = self.tt - self.bt     # waiting time
         self.ntt = self.tt / self.bt    # normalized turn-around time
+        
     def calculate_r_ratio(self):
         self.r_ratio = (self.wt + self.bt) / self.bt # reponse-ratio 응답률
 
