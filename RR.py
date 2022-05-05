@@ -27,15 +27,15 @@ class readyQueue:
 
 
 class process:
-    def __init__(self, at, bt, tq):     # at는 도착 시간, bt는 실행 시간, tq는 CPU 할당 시간
-        self.at = at            # 도착시간(arrive time)   
-        self.bt = bt            # 실행시간(burst time)
-        self.tq = tq            # CPU 할당 시간(time quantum)
-        
+    def __init__(self, at, bt, id, tq):
+        self.at = at   # arrival time
+        self.bt = bt   # burst time
+        self.id = id
+        self.tq = tq
 
     def calculate_time(self, time):
-        self.tt = time - self.at        # turn-around time(tt)
-        self.wt = self.tt - self.bt     # waiting time(wt)
+        self.tt = time - self.at        # turn-around time
+        self.wt = self.tt - self.bt     # waiting time
         self.ntt = self.tt / self.bt    # normalized turn-around time
        
     
@@ -103,7 +103,7 @@ class RR:
                 if self.process[i].at != -1 and self.process[i].at <= self.time:
                     self.readyQueue.enqueue(self.process[i])
                     self.process[i].at = -1 # 이미 추가된 프로세스 예외처리
-                    print("process %s arrive" %(i+1))
+                    print("process %d arrive" %(self.process[i].id))
     
 
             # CPU가 작동중이지 않다면
@@ -122,7 +122,7 @@ class RR:
                                 if self.process[i].at != -1 and self.process[i].at <= self.time:
                                     self.readyQueue.enqueue(self.process[i])
                                     self.process[i].at = -1 # 이미 추가된 프로세스 예외처리
-                                    print("process %s arrive" %(i+1))
+                                    print("process %d arrive" %(self.process[i].id))
                         #print(self.ready_process)
                         print("일이 덜 끝났으므로 다시 대기큐에 들어가")
                         self.readyQueue.enqueue(self.ready_process) # 대기큐 맨뒤에 넣기
@@ -138,38 +138,26 @@ class RR:
                                 if self.process[i].at != -1 and self.process[i].at <= self.time:
                                     self.readyQueue.enqueue(self.process[i])
                                     self.process[i].at = -1 # 이미 추가된 프로세스 예외처리
-                                    print("process %s arrive" %(i+1))
-                        print("process finish, total time : ", self.time)
+                                    print("process %d arrive" %(self.process[i].id))
+                        print("process %d finish, total time : %d" %(self.ready_process.id, self.time))
                         count += 1
-                    
-                
+
+            # 작업이 끝난 프로세스의 BT가 0이고 대기 큐에서 완전히 지워졌다면 종료 메시지            
+            if self.ready_process.bt == 0 and self.ready_process not in self.readyQueue.items:  
+                self.terminated_state_RR(self.ready_process)        
 
 
-
-
-                # 아직 추가되지 않은 프로세스이거나 도착시간이 현재시간보다 작거나 같을 때
-                # if self.process[i].at is not -1 and self.process[i].at <= self.time:
-                    
-                #     self.readyQueue.enqueue(self.process[i])    # readyqueue에 프로세스 삽입
-
-                #     self.process[i].at = -1 # 이미 추가된 프로세스 예외처리
-                #     print("process %s arrive" %(i+1))
-
-                # CPU가 작동중이지 않다면
-            
-
-
-
-    def terminated_state_RR(self):
-        del self.process
+    def terminated_state_RR(self, ready_process):
+        print("Process %s ended at time %s." % (ready_process.id, self.time) )
+        del self.ready_process
 
 
 if __name__ == "__main__":
-    process1 = process(0, 3, 3)
-    process2 = process(1, 7, 3)
-    process3 = process(3, 2, 3)
-    process4 = process(5, 5, 3)
-    process5 = process(6, 3, 3)
+    process1 = process(0, 3, 1, 3)
+    process2 = process(1, 7, 2, 3)
+    process3 = process(3, 2, 3, 3)
+    process4 = process(5, 5, 4, 3)
+    process5 = process(6, 3, 5, 3)
 
     process_list = []
     process_list.append(process1)
