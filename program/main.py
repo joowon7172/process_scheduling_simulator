@@ -1,7 +1,9 @@
 import option as op
 import SPN
+import FCFS
 import HRRN
 import SRTN
+
 
 if __name__ == "__main__":
     process1 = op.process(0, 3, 1)
@@ -19,11 +21,11 @@ if __name__ == "__main__":
     
     CPU1 = op.CPU(process_list)
     spn = SPN.SPN(process_list, CPU1)
-    hrrn = HRRN.HRRN(process_list, CPU1)
-    srtn = SRTN.SRTN(process_list, CPU1)
+    fcfs = FCFS.FCFS(process_list, CPU1)
+    #hrrn = HRRN.HRRN(process_list, CPU1)
+    #srtn = SRTN.SRTN(process_list, CPU1)
     
-    #spn.running()
-    srtn.running()
+    fcfs.running()
+    # spn.running()
+    # srtn.running()
     # hrrn.running()
-    
-    
