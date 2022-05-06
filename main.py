@@ -1,10 +1,12 @@
 import copy
 
+import gantt
 import option as op
 import FCFS
 import SPN
 import HRRN
 import SRTN
+import RR
 
 
 if __name__ == "__main__":
@@ -30,18 +32,32 @@ if __name__ == "__main__":
 
     for k in range(0, case_num):
         case_list = copy.deepcopy(process_list)
-        print("1: FCFS 2: SPN 3: SRTN 4: HRRN")
+        print("1: FCFS 2: SPN 3: SRTN 4: HRRN 5: RR")
         opt = int(input("Algotithm : "))
-        CPU_id = int(input("CPU ID : "))
-        if opt == 1:
-            fcfs = FCFS.FCFS(case_list, processor_list[CPU_id - 1])
-            fcfs.running_state_fcfs()
-        elif opt == 2:
-            spn = SPN.SPN(case_list, processor_list[CPU_id - 1])
-            spn.running()
-        elif opt == 3:
-            srtn = SRTN.SRTN(case_list, processor_list[CPU_id - 1])
-            srtn.running()
-        elif opt == 4:
-            hrrn = HRRN.HRRN(case_list, processor_list[CPU_id - 1])
-            hrrn.running()
+        while 1 <= opt <= 5:
+            CPU_id = int(input("CPU ID : "))
+            if opt == 1:
+                fcfs = FCFS.FCFS(case_list, processor_list[CPU_id - 1])
+                fcfs.running()
+                break
+            elif opt == 2:
+                spn = SPN.SPN(case_list, processor_list[CPU_id - 1])
+                spn.running()
+                break
+            elif opt == 3:
+                srtn = SRTN.SRTN(case_list, processor_list[CPU_id - 1])
+                srtn.running()
+                break
+            elif opt == 4:
+                hrrn = HRRN.HRRN(case_list, processor_list[CPU_id - 1])
+                hrrn.running()
+                break
+            elif opt == 5:
+                tq = int(input("Time Quantum : "))
+                rr = RR.RR(case_list, processor_list[CPU_id - 1], tq)
+                rr.running()
+                break
+
+    print("All cases are done. Please reset.")
+
+

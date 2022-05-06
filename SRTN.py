@@ -10,7 +10,7 @@ class SRTN:
         self.time = 0  # 현재 시간 (lapse)
         self.cnt = 0
 
-        self.gantt = gt.Gantt()  # 간트 차트 클래스 선언
+        self.gantt = gt.Gantt(len(process_input))  # 간트 차트 클래스 선언
         print("\nTest case started. CPU Type is %s." % self.type)
 
     def running(self):
@@ -82,7 +82,7 @@ class SRTN:
             print("No process in ready queue. Time is %s." % self.time)
 
     def termination_state_srtn(self, ready_process, start_time):  # 작업이 끝난 프로세스 termination.
-        print("Process %s ended at time %s." % (ready_process.id, self.time))  
+        print("Process %s ended at time %s." % (ready_process.id, self.time))
         self.gantt.store(start_time, self.time, ready_process.id)  # 간트 차트에 표시할 정보 저장.
         del ready_process
         self.cnt += 1
