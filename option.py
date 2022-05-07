@@ -37,6 +37,9 @@ class process:
     def calculate_r_ratio(self):
         self.r_ratio = (self.wt + self.bt) / self.bt # reponse-ratio 응답률
 
+    def __del__(self):
+        print(self.id + "process deleted")
+
 class SPN_readyQueue(readyQueue):
     def __init__(self):
         self.items = []
