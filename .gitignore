@@ -1,5 +1,6 @@
 FCFS.py
 SPN.py
 SRTN.py
-option.py
 main.py
+.vscode
+__pycache__
