@@ -259,4 +259,12 @@ ptable.heading("four", text="Turn-around Time", anchor="center")
 ptable.column("#5", width=200, anchor="center")
 ptable.heading("five", text="Normalized Turn-around Time", anchor="center")
 
+############## Program Exit ####################
+def exit():
+    if msgbox.askokcancel("종료", "종료하시겠습니까?"):
+        print("종료")
+        root.destroy()
+
+root.protocol('WM_DELETE_WINDOW', exit)
+
 root.mainloop()
